@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class ProductController extends Controller
 {
@@ -144,6 +145,8 @@ class ProductController extends Controller
             'items' => $items,
             'total' => $total,
             'status' => 'pending',
+            'payment_method' => 'midtrans',
+            'payment_status' => 'pending',
             'created_by' => $request->user()->id,
             'created_by_name' => $request->user()->name,
         ]);
@@ -161,8 +164,9 @@ class ProductController extends Controller
         }
 
         // clear cart sessions
-        session()->forget(['cart', 'checkout_cart']);
+        Session::forget(['cart', 'checkout_cart']);
 
-        return redirect()->route('products.index')->with('success', 'Terima kasih! Pesanan Anda telah diterima.');
+        // redirect to payment page
+        return redirect()->route('payment.checkout', $order->id);
     }
 }

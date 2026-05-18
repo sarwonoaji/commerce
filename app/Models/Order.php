@@ -17,6 +17,10 @@ class Order extends Model
         'items',
         'total',
         'status',
+        'payment_method',
+        'payment_status',
+        'transaction_id',
+        'payment_response',
         'created_by',
         'created_by_name',
     ];

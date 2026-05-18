@@ -17,9 +17,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [ProductController::class, 'checkout'])->name('checkout.index');
     Route::post('/checkout', [ProductController::class, 'checkoutSubmit'])->name('checkout.submit');
 
+    // Payment routes
+    Route::get('/payment/{order}/checkout', [App\Http\Controllers\PaymentController::class, 'showCheckout'])->name('payment.checkout');
+    Route::get('/payment/{order}/snap-token', [App\Http\Controllers\PaymentController::class, 'getSnapToken'])->name('payment.snap-token');
+    Route::get('/payment/{order}', [App\Http\Controllers\PaymentController::class, 'paymentStatus'])->name('payment.status');
+    Route::post('/payment/{order}/check-status', [App\Http\Controllers\PaymentController::class, 'checkStatus'])->name('payment.check-status');
+
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 });
+
+// Midtrans callback route (without auth middleware for webhook)
+Route::post('/payment/callback', [App\Http\Controllers\PaymentController::class, 'handleCallback'])->name('payment.callback');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('products', AdminProductController::class)->except(['show']);
