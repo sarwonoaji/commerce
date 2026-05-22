@@ -6,7 +6,7 @@
             <div class="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
                 <div>
                     <h1 class="text-3xl font-semibold tracking-tight text-slate-900">Keranjang Belanja</h1>
-                    <p class="mt-2 max-w-2xl text-slate-600">Tinjau pesanan kamu sebelum lanjut ke checkout. Ubah jumlah atau hapus produk dengan mudah.</p>
+                  
                 </div>
                 <a href="{{ route('products.index') }}" class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">Lanjut Belanja</a>
             </div>
@@ -14,7 +14,6 @@
             @if(empty($cart))
                 <div class="mt-10 rounded-[1.75rem] bg-slate-50 p-10 text-center text-slate-600">
                     <p class="text-lg font-medium text-slate-900">Keranjang kamu masih kosong</p>
-                    <p class="mt-3">Tambahkan produk LKS dari katalog agar bisa melanjutkan pembelian.</p>
                 </div>
             @else
                 <div class="mt-10 grid gap-6 xl:grid-cols-[1.5fr_0.5fr]">
@@ -70,7 +69,7 @@
                                 {{-- selected[] inputs appended by JS --}}
                             </form>
 
-                            <button id="checkout-selected-btn" class="inline-flex w-full items-center justify-center rounded-[1.5rem] bg-amber-500 px-6 py-4 text-sm font-semibold text-white transition hover:bg-amber-600">Checkout Item yang Dipilih</button>
+                            <button id="checkout-selected-btn" class="inline-flex w-full items-center justify-center rounded-[1.5rem] bg-indigo-600 px-6 py-4 text-sm font-semibold text-white transition hover:bg-indigo-600">Checkout Item yang Dipilih</button>
 
                             <a href="{{ route('checkout.index') }}" class="inline-flex w-full items-center justify-center rounded-[1.5rem] border border-slate-200 bg-white px-6 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-50">Checkout Semua</a>
                         </div>

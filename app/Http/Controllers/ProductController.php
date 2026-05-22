@@ -8,16 +8,53 @@ use Illuminate\Support\Facades\Session;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::orderBy('grade')->orderBy('subject')->get();
+        $query = Product::query();
 
-        return view('products.index', compact('products'));
+        // Subject filter (related products link)
+        if ($subject = $request->query('subject')) {
+            $query->where('subject', $subject);
+        }
+
+        // Search
+        if ($q = $request->query('q')) {
+            $query->where(function ($qbuilder) use ($q) {
+                $qbuilder->where('title', 'like', "%{$q}%")
+                    ->orWhere('description', 'like', "%{$q}%")
+                    ->orWhere('subject', 'like', "%{$q}%")
+                    ->orWhere('grade', 'like', "%{$q}%");
+            });
+        }
+
+        // Sorting
+        $sort = $request->query('sort');
+        if ($sort === 'new') {
+            $query->orderBy('created_at', 'desc');
+        } elseif ($sort === 'price_asc') {
+            $query->orderBy('price', 'asc');
+        } elseif ($sort === 'price_desc') {
+            $query->orderBy('price', 'desc');
+        } else {
+            $query->orderBy('grade')->orderBy('subject');
+        }
+
+        // Pagination (12 per page)
+        $products = $query->paginate(12)->withQueryString();
+        $totalProducts = Product::count();
+
+        return view('products.index', compact('products', 'totalProducts'));
     }
 
     public function show(Product $product)
     {
-        return view('products.show', compact('product'));
+        $relatedProducts = Product::where('subject', $product->subject)
+            ->where('id', '!=', $product->id)
+            ->orderBy('created_at', 'desc')
+            ->limit(4)
+            ->get();
+
+        return view('products.show', compact('product', 'relatedProducts'));
     }
 
     public function addToCart(Request $request, Product $product)

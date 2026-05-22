@@ -11,9 +11,9 @@
     </head>
     <body class="min-h-screen bg-slate-100 text-slate-900">
         <div class="flex min-h-screen">
-            <aside class="hidden w-72 border-r border-slate-200 bg-white p-6 lg:block">
-                @include('layouts.admin-sidebar')
-            </aside>
+            <aside class="hidden w-72 lg:block h-screen sticky top-0 p-6 bg-primary text-primary-content">
+                    @include('layouts.admin-sidebar')
+                </aside>
 
             <div class="flex-1">
                 <header class="border-b border-slate-200 bg-white px-6 py-4 shadow-sm">

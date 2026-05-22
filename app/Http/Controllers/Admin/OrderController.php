@@ -14,11 +14,23 @@ class OrderController extends Controller
         abort_unless(Auth::user()?->role === 'admin', 403);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $this->authorizeAdmin();
 
-        $orders = Order::with('createdBy')->orderBy('created_at', 'desc')->paginate(20);
+        $ordersQuery = Order::with('createdBy')->orderBy('created_at', 'desc');
+
+        if ($request->filled('q')) {
+            $query = $request->input('q');
+            $ordersQuery->where(function ($builder) use ($query) {
+                $builder->where('name', 'like', "%{$query}%")
+                    ->orWhere('email', 'like', "%{$query}%")
+                    ->orWhere('status', 'like', "%{$query}%")
+                    ->orWhere('created_by_name', 'like', "%{$query}%");
+            });
+        }
+
+        $orders = $ordersQuery->paginate(20)->withQueryString();
 
         return view('admin.orders.index', compact('orders'));
     }

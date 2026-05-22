@@ -1,52 +1,133 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
-
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Daftar — {{ config('app.name', 'Commerce') }}</title>
+    @if (class_exists('Vite'))
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @else
+        <link rel="stylesheet" href="{{ asset('build/assets/app.css') }}">
+    @endif
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-pink-50 flex items-center py-12 px-4">
+    <div class="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div class="hidden md:flex flex-col items-start justify-center px-8">
+            <h1 class="text-4xl font-extrabold text-indigo-600 mb-4">Bergabung dengan E-Commerce</h1>
+            <p class="text-gray-600 mb-6">Buat akun untuk mulai belanja dan mengelola pesanan.</p>
+            <div class="w-full max-w-sm">
+                <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto opacity-90">
+                    <defs>
+                        <linearGradient id="g2" x1="0" x2="1">
+                            <stop offset="0%" stop-color="#6366f1" />
+                            <stop offset="100%" stop-color="#ec4899" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="400" height="200" rx="12" fill="url(#g2)" opacity="0.12" />
+                </svg>
+            </div>
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <div class="w-full flex items-center justify-center px-4">
+            <div class="w-full max-w-md bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-8">
+                <div class="text-center mb-6">
+                    <p class="text-2xl font-bold text-indigo-600">Buat akun baru</p>
+                </div>
+
+            @if (session('status'))
+                <div class="mb-4 text-sm text-green-700 bg-green-50 border border-green-100 rounded p-3">{{ session('status') }}</div>
+            @endif
+
+            @if ($errors->any())
+                <div class="mb-4">
+                    <div class="text-sm text-red-700 bg-red-50 border border-red-100 rounded p-3">
+                        <ul class="list-disc list-inside">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('register') }}" novalidate>
+                @csrf
+
+                <div class="mb-4">
+                    <label for="name" class="block text-sm font-medium text-gray-700">Nama</label>
+                    <div class="relative mt-1">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A4 4 0 0112 15a4 4 0 016.879 2.804"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </span>
+                        <input id="name" name="name" type="text" value="{{ old('name') }}" required autofocus autocomplete="name"
+                            class="pl-10 pr-3 py-2 block w-full rounded-md border border-gray-200 bg-white focus:ring-2 focus:ring-indigo-300 focus:border-transparent" />
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <div class="relative mt-1">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m8 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        </span>
+                        <input id="email" name="email" type="email" value="{{ old('email') }}" required autocomplete="username"
+                            class="pl-10 pr-3 py-2 block w-full rounded-md border border-gray-200 bg-white focus:ring-2 focus:ring-indigo-300 focus:border-transparent" />
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <div class="relative mt-1">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.657 1.343-3 3-3s3 1.343 3 3v1H9v-1c0-1.657 1.343-3 3-3z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11V9a5 5 0 0110 0v2"></path></svg>
+                        </span>
+                        <input id="password" name="password" type="password" required autocomplete="new-password"
+                            class="pl-10 pr-12 py-2 block w-full rounded-md border border-gray-200 bg-white focus:ring-2 focus:ring-indigo-300 focus:border-transparent" />
+                        <button type="button" data-target="password" class="toggle-password absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-indigo-600">Tampil</button>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Konfirmasi Password</label>
+                    <div class="relative mt-1">
+                        <input id="password_confirmation" name="password_confirmation" type="password" required autocomplete="new-password"
+                            class="pl-3 pr-12 py-2 block w-full rounded-md border border-gray-200 bg-white focus:ring-2 focus:ring-indigo-300 focus:border-transparent" />
+                        <button type="button" data-target="password_confirmation" class="toggle-password absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-indigo-600">Tampil</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-md shadow">Daftar</button>
+
+                <div class="mt-4">
+                    <div class="flex items-center justify-center gap-3">
+                        <button type="button" class="flex-1 py-2 px-3 border rounded-md text-sm bg-white hover:shadow">Daftar dengan Google</button>
+                        <button type="button" class="flex-1 py-2 px-3 border rounded-md text-sm bg-white hover:shadow">Daftar dengan Facebook</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="mt-6 text-center text-sm text-gray-600">
+                Sudah punya akun? <a href="{{ route('login') }}" class="text-indigo-600 hover:underline">Masuk</a>
+            </div>
+            </div>
         </div>
+    </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    <script>
+        document.querySelectorAll('.toggle-password').forEach(function(btn){
+            btn.addEventListener('click', function(){
+                var id = btn.dataset.target;
+                var input = document.getElementById(id);
+                if(!input) return;
+                if(input.type === 'password'){
+                    input.type = 'text';
+                    btn.textContent = 'Sembunyikan';
+                } else {
+                    input.type = 'password';
+                    btn.textContent = 'Tampil';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -85,10 +85,12 @@ class PaymentController extends Controller
                 ];
             }
 
-            // Build payload
+            // Build payload and persist the actual Midtrans order ID
+            $midtransOrderId = 'ORDER-' . $order->id . '-' . time();
+
             $payload = [
                 'transaction_details' => [
-                    'order_id' => 'ORDER-' . $order->id . '-' . time(),
+                    'order_id' => $midtransOrderId,
                     'gross_amount' => (int) $order->total,
                 ],
                 'item_details' => $item_details,
@@ -98,8 +100,11 @@ class PaymentController extends Controller
                 ],
             ];
 
+            $order->update(['transaction_id' => $midtransOrderId]);
+
             \Log::info('Midtrans Payload', [
                 'payload' => $payload,
+                'midtrans_order_id' => $midtransOrderId,
             ]);
 
             $snapToken = Snap::getSnapToken($payload);
@@ -138,36 +143,45 @@ class PaymentController extends Controller
             return response()->json(['message' => 'Order not found'], 404);
         }
 
+        // Keep the actual Midtrans order id in the order record
+        if (empty($order->transaction_id) || $order->transaction_id !== $notification->order_id) {
+            $order->update(['transaction_id' => $notification->order_id]);
+        }
+
         try {
+            /** @var object $transactionStatus */
             $transactionStatus = Transaction::status($notification->order_id);
             
             $statusCode = $transactionStatus->status_code;
             $paymentStatus = $transactionStatus->transaction_status;
+            $updateData = [
+                'payment_response' => json_encode($notification),
+            ];
             
             // Update order status based on payment status
             if ($paymentStatus === 'capture') {
                 if ($statusCode === '200') {
                     // Success
-                    $order->update(['status' => 'paid', 'payment_status' => 'success']);
+                    $order->update(array_merge($updateData, ['status' => 'paid', 'payment_status' => 'success']));
                 }
             } elseif ($paymentStatus === 'settlement') {
                 // Settlement successful
-                $order->update(['status' => 'paid', 'payment_status' => 'success']);
+                $order->update(array_merge($updateData, ['status' => 'paid', 'payment_status' => 'success']));
             } elseif ($paymentStatus === 'pending') {
                 // Payment pending
-                $order->update(['status' => 'pending', 'payment_status' => 'pending']);
+                $order->update(array_merge($updateData, ['status' => 'pending', 'payment_status' => 'pending']));
             } elseif ($paymentStatus === 'deny') {
                 // Payment denied
-                $order->update(['status' => 'failed', 'payment_status' => 'failed']);
+                $order->update(array_merge($updateData, ['status' => 'failed', 'payment_status' => 'failed']));
             } elseif ($paymentStatus === 'cancel') {
                 // Payment cancelled
-                $order->update(['status' => 'cancelled', 'payment_status' => 'cancelled']);
+                $order->update(array_merge($updateData, ['status' => 'cancelled', 'payment_status' => 'cancelled']));
             } elseif ($paymentStatus === 'expire') {
                 // Payment expired
-                $order->update(['status' => 'expired', 'payment_status' => 'expired']);
+                $order->update(array_merge($updateData, ['status' => 'expired', 'payment_status' => 'expired']));
             } elseif ($paymentStatus === 'refund') {
                 // Payment refunded
-                $order->update(['status' => 'refunded', 'payment_status' => 'refunded']);
+                $order->update(array_merge($updateData, ['status' => 'refunded', 'payment_status' => 'refunded']));
             }
 
             return response()->json(['message' => 'Success'], 200);
@@ -185,7 +199,8 @@ class PaymentController extends Controller
             Config::$serverKey = config('midtrans.server_key');
             Config::$clientKey = config('midtrans.client_key');
             
-            $status = Transaction::status('ORDER-' . $order->id);
+            /** @var object $status */
+            $status = Transaction::status($order->transaction_id ?: 'ORDER-' . $order->id);
             
             return response()->json([
                 'success' => true,

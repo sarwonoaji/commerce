@@ -26,7 +26,7 @@
 
                 <div class="flex items-center justify-between gap-4">
                     <a href="{{ route('cart.index') }}" class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50">Kembali ke Keranjang</a>
-                    <button type="submit" class="inline-flex items-center justify-center rounded-[1.5rem] bg-emerald-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-600">Bayar Sekarang</button>
+                    <button type="submit" class="inline-flex items-center justify-center rounded-[1.5rem] bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-600">Bayar Sekarang</button>
                 </div>
             </form>
         </section>

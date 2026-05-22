@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Product;
+use App\Models\Order;
+use App\Models\User;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +41,13 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
 Route::get('/dashboard', function () {
     if (Auth::user()?->role === 'admin') {
-        return view('dashboard');
+        $productCount = Product::count();
+        $orderCount = Order::count();
+        $userCount = User::count();
+        $totalRevenue = Order::sum('total');
+        $recentOrders = Order::with('orderItems')->latest()->take(6)->get();
+
+        return view('dashboard', compact('productCount', 'orderCount', 'userCount', 'totalRevenue', 'recentOrders'));
     }
 
     return redirect()->route('products.index');
