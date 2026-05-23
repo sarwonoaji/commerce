@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 
 @section('title', 'Manajemen Produk')
-@section('description', 'CRUD produk LKS untuk admin PT ABC.')
 @section('action')
     <a href="{{ route('admin.products.create') }}" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">Tambah Produk</a>
 @endsection

@@ -7,7 +7,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="min-h-screen bg-base-200 text-base-content">
-        <div class="navbar bg-primary text-primary-content shadow-md">
+        <div class="navbar sticky top-0 z-50 bg-primary text-primary-content shadow-md">
             <div class="container mx-auto flex items-center gap-4">
                 <div class="flex items-center flex-1">
                     <a href="{{ route('products.index') }}" class="flex items-center gap-3">

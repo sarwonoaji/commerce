@@ -60,7 +60,7 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A4 4 0 0112 15a4 4 0 016.879 2.804"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         </span>
                         <input id="name" name="name" type="text" value="{{ old('name') }}" required autofocus autocomplete="name"
-                            class="pl-10 pr-3 py-2 block w-full rounded-md border border-gray-200 bg-white focus:ring-2 focus:ring-indigo-300 focus:border-transparent" />
+                            class="pl-10 pr-3 py-2 block w-full rounded-md border border-gray-200 bg-white text-black focus:ring-2 focus:ring-indigo-300 focus:border-transparent" />
                     </div>
                 </div>
 
@@ -71,7 +71,7 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m8 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                         </span>
                         <input id="email" name="email" type="email" value="{{ old('email') }}" required autocomplete="username"
-                            class="pl-10 pr-3 py-2 block w-full rounded-md border border-gray-200 bg-white focus:ring-2 focus:ring-indigo-300 focus:border-transparent" />
+                            class="pl-10 pr-3 py-2 block w-full rounded-md border border-gray-200 bg-white text-black focus:ring-2 focus:ring-indigo-300 focus:border-transparent" />
                     </div>
                 </div>
 
@@ -82,7 +82,7 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.657 1.343-3 3-3s3 1.343 3 3v1H9v-1c0-1.657 1.343-3 3-3z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11V9a5 5 0 0110 0v2"></path></svg>
                         </span>
                         <input id="password" name="password" type="password" required autocomplete="new-password"
-                            class="pl-10 pr-12 py-2 block w-full rounded-md border border-gray-200 bg-white focus:ring-2 focus:ring-indigo-300 focus:border-transparent" />
+                            class="pl-10 pr-12 py-2 block w-full rounded-md border border-gray-200 bg-white text-black focus:ring-2 focus:ring-indigo-300 focus:border-transparent" />
                         <button type="button" data-target="password" class="toggle-password absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-indigo-600">Tampil</button>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                     <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Konfirmasi Password</label>
                     <div class="relative mt-1">
                         <input id="password_confirmation" name="password_confirmation" type="password" required autocomplete="new-password"
-                            class="pl-3 pr-12 py-2 block w-full rounded-md border border-gray-200 bg-white focus:ring-2 focus:ring-indigo-300 focus:border-transparent" />
+                            class="pl-3 pr-12 py-2 block w-full rounded-md border border-gray-200 bg-white text-black focus:ring-2 focus:ring-indigo-300 focus:border-transparent" />
                         <button type="button" data-target="password_confirmation" class="toggle-password absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-indigo-600">Tampil</button>
                     </div>
                 </div>

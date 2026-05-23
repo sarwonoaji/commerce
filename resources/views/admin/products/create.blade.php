@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 
 @section('title', 'Tambah Produk Baru')
-@section('description', 'Masukkan data LKS baru untuk ditayangkan di katalog.')
 @section('action')
     <a href="{{ route('admin.products.index') }}" class="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">Kembali ke Produk</a>
 @endsection
