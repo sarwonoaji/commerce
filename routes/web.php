@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\User;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductMessageController;
+use App\Http\Controllers\Admin\MessageController as AdminMessageController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('products.index');
     Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+    Route::post('/products/{product}/messages', [ProductMessageController::class, 'store'])->name('products.messages.store');
+    Route::post('/messages/{message}/reply', [App\Http\Controllers\MessageReplyController::class, 'store'])->name('messages.reply.store');
     Route::post('/cart/add/{product}', [ProductController::class, 'addToCart'])->name('cart.add');
     Route::get('/cart', [ProductController::class, 'cart'])->name('cart.index');
     Route::post('/cart/remove/{product}', [ProductController::class, 'cartRemove'])->name('cart.remove');
@@ -35,7 +40,10 @@ Route::post('/payment/callback', [App\Http\Controllers\PaymentController::class,
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('products', AdminProductController::class)->except(['show']);
+    Route::resource('messages', AdminMessageController::class)->only(['index', 'show', 'destroy']);
+    Route::post('messages/{message}/reply', [AdminMessageController::class, 'reply'])->name('messages.reply');
     Route::resource('orders', App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'destroy']);
+    Route::resource('users', AdminUserController::class)->except(['show']);
     Route::patch('orders/{order}/status', [App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 });
 

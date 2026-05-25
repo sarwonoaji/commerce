@@ -16,6 +16,14 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v4H3z"/><path d="M5 7v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7"/><path d="M8 11h8"/></svg>
             Pesanan
         </a>
+        <a href="{{ route('admin.users.index') }}" class="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium {{ request()->routeIs('admin.users.*') ? 'bg-white text-primary' : 'text-primary-content hover:bg-white/10 hover:text-primary' }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-3-3.87"/><path d="M4 21v-2a4 4 0 0 1 3-3.87"/><path d="M12 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+            Pengguna
+        </a>
+        <a href="{{ route('admin.messages.index') }}" class="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium {{ request()->routeIs('admin.messages.*') ? 'bg-white text-primary' : 'text-primary-content hover:bg-white/10 hover:text-primary' }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Pesan
+        </a>
         <a href="{{ route('products.index') }}" class="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium {{ request()->routeIs('products.index') ? 'bg-white text-primary' : 'text-primary-content hover:bg-white/10 hover:text-primary' }}">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M21 11v10H3V11"/><path d="M7 21V11h10v10"/></svg>
             Toko Publik

@@ -127,6 +127,12 @@
                                     </button>
                                     <a href="{{ route('checkout.index') }}" class="block text-center text-sm font-semibold text-indigo-600 hover:text-indigo-800">Beli Sekarang</a>
                                 </form>
+                                <div class="mt-4">
+                                    @if(session('success'))
+                                        <div class="rounded-md bg-emerald-50 p-3 text-emerald-700">{{ session('success') }}</div>
+                                    @endif
+                                    <button id="openChatBtn" type="button" class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-3xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50">Tanya Admin</button>
+                                </div>
                             </div>
 
                             <div class="rounded-[1.75rem] bg-slate-50 p-6 text-slate-700 shadow-sm ring-1 ring-slate-100">
@@ -162,6 +168,59 @@
         <div id="lightbox" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/80 p-4" aria-hidden="true">
             <button id="lightboxClose" type="button" class="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-900 shadow-lg">×</button>
             <img id="lightboxImage" src="" alt="Preview" class="max-h-[90vh] max-w-full rounded-3xl shadow-2xl" />
+        </div>
+
+        @if(isset($userMessages) && $userMessages->isNotEmpty())
+            <div class="mt-6 rounded-[1.5rem] bg-white p-6 shadow-sm ring-1 ring-slate-100">
+                <h2 class="text-lg font-semibold text-slate-900">Percakapan Anda tentang produk ini</h2>
+                <div class="mt-4 space-y-4">
+                    @foreach($userMessages as $um)
+                        <div class="rounded-lg border p-4">
+                            <div class="text-sm text-slate-700">Anda • {{ $um->created_at->diffForHumans() }}</div>
+                            <div class="mt-2 whitespace-pre-line text-slate-700">{{ $um->body }}</div>
+
+                            @if($um->replies->isNotEmpty())
+                                <div class="mt-4 space-y-3">
+                                    @foreach($um->replies as $reply)
+                                        <div class="rounded-lg bg-slate-50 p-3">
+                                            <div class="text-sm font-semibold">{{ $reply->user->name }} <span class="text-xs text-slate-500">• {{ $reply->created_at->diffForHumans() }}</span></div>
+                                            <div class="mt-1 text-slate-700">{{ $reply->body }}</div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+
+                            <form action="{{ route('messages.reply.store', $um) }}" method="POST" class="mt-4">
+                                @csrf
+                                <textarea name="body" rows="3" required class="w-full rounded-lg border border-slate-200 p-3 text-sm" placeholder="Balas pesan..."></textarea>
+                                <div class="mt-2 text-right">
+                                    <button type="submit" class="inline-flex items-center gap-2 rounded-3xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white">Kirim Balasan</button>
+                                </div>
+                            </form>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        <div id="chatModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4">
+            <div class="w-full max-w-xl rounded-2xl bg-white p-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold">Kirim Pesan ke Admin</h3>
+                    <button id="closeChatBtn" type="button" class="text-slate-700">×</button>
+                </div>
+                <form action="{{ route('products.messages.store', $product) }}" method="POST" class="mt-4">
+                    @csrf
+                    <div>
+                        <label for="body" class="sr-only">Pesan</label>
+                        <textarea id="body" name="body" rows="4" required class="w-full rounded-lg border border-slate-200 p-3 text-sm"></textarea>
+                    </div>
+                    <div class="mt-4 flex items-center gap-3">
+                        <button type="submit" class="inline-flex items-center gap-2 rounded-3xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white">Kirim</button>
+                        <button id="cancelChatBtn" type="button" class="inline-flex items-center gap-2 rounded-3xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold">Batal</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </section>
 
@@ -203,6 +262,28 @@
                 lightbox.classList.add('hidden');
                 lightbox.setAttribute('aria-hidden', 'true');
             }
+        });
+
+        // Chat modal
+        const chatModal = document.getElementById('chatModal');
+        const openChatBtn = document.getElementById('openChatBtn');
+        const closeChatBtn = document.getElementById('closeChatBtn');
+        const cancelChatBtn = document.getElementById('cancelChatBtn');
+
+        function openChat() {
+            chatModal.classList.remove('hidden');
+        }
+
+        function closeChat() {
+            chatModal.classList.add('hidden');
+        }
+
+        if (openChatBtn) openChatBtn.addEventListener('click', openChat);
+        if (closeChatBtn) closeChatBtn.addEventListener('click', closeChat);
+        if (cancelChatBtn) cancelChatBtn.addEventListener('click', closeChat);
+
+        chatModal.addEventListener('click', (e) => {
+            if (e.target === chatModal) closeChat();
         });
     </script>
 @endsection

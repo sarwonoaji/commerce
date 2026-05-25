@@ -3,7 +3,7 @@
 @section('title', 'Daftar Pesanan')
 
 @section('content')
-    <div class="max-w-6xl">
+    <div class="space-y-6">
         <div class="rounded-3xl bg-white p-6 shadow-sm">
             <h2 class="text-xl font-semibold mb-4">Daftar Pesanan</h2>
 
@@ -40,7 +40,12 @@
                                 <td class="py-3">{{ $order->status }}</td>
                                 <td class="py-3">{{ $order->created_at->format('Y-m-d H:i') }}</td>
                                 <td class="py-3">
-                                    <a href="{{ route('admin.orders.show', $order) }}" class="inline-flex items-center rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white">Lihat</a>
+                                    <a href="{{ route('admin.orders.show', $order) }}" title="Lihat pesanan" class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-100 hover:text-indigo-900 transition">
+                                        <span class="sr-only">Lihat pesanan</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M10 3C6 3 2.73 5.11 1 8c1.73 2.89 5 5 9 5s7.27-2.11 9-5c-1.73-2.89-5-5-9-5zm0 8a3 3 0 110-6 3 3 0 010 6z" />
+                                        </svg>
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach

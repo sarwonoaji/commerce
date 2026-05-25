@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Message;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -54,7 +56,15 @@ class ProductController extends Controller
             ->limit(4)
             ->get();
 
-        return view('products.show', compact('product', 'relatedProducts'));
+        $userMessages = collect();
+        if (Auth::check()) {
+            $userMessages = Message::where('product_id', $product->id)
+                ->where('user_id', Auth::id())
+                ->with('replies.user')
+                ->get();
+        }
+
+        return view('products.show', compact('product', 'relatedProducts', 'userMessages'));
     }
 
     public function addToCart(Request $request, Product $product)
